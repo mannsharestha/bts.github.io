@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <title>Musin</title>
+</head>
+<body>
+    <div class="" x-data="musinData()">
+        <!-- Albums and Music -->       
+        <div class="h-full m-8" >
+            <div class="w-full h-full rounded-md bg-blue-200 text-xl p-2 text-center">
+                <div class="" x-text="tittle"></div>
+            </div>
+            <div class="w-full h-full mt-4 rounded-md text-xl mb-32">
+                <div class="grid grid-cols-2 gap-2 flex">
+                    <template x-for="(song, index) in songs">
+                        <div class="hover:bg-blue-200 p-2 bg-pink-200 rounded-md items-center justify-center" @click="currentSong = index;playSong()">
+                            <button ><img :src="song.image" alt=""></button>
+                            <div class="" x-text="song.tittle"></div>
+                            <div class="font-bold flex">
+                                <div x-text="song.album"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <!-- Music Player -->
+        <div class="fixed bottom-0 w-full bg-gray-100 ">
+            <div class="p-2 flex items-center">
+                <div class="font-bold text-lg">Now Playing:</div>
+                <div class="ml-1 text-lg text-purple-400 font-bold" x-text="songs[currentSong].tittle"></div>
+            </div>
+            <audio x-ref="song" :src="getSong()" ></audio>
+            <div class="flex items-center justify-center  p-1">
+                <!--Previos Button-->
+                <button class="" x-show="currentSong > 0" @click="prevSong()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
+                    </svg>
+                </button>
+                <!--Play Button-->
+                <button x-show="!playing" @click="playSong()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <!--Pause BUtton-->
+                <button x-show="playing" @click="pauseSong()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <!--Next Button-->
+                <button @click="nextSong()" x-show="currentSong < songs.length-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function musinData(){
+            return{
+                tittle:'Musin',
+                playing: false,
+                currentSong:0,
+
+                songs: [
+                    {
+                        src:'Audio/BS.mp3',
+                        tittle:'Black Swan',
+                        album:'Map of the soul 7',
+                        image:'https://picsum.photos/id/237/200',
+                    },
+                    {
+                        src:'Audio/DY.mp3',
+                        tittle:'Dynamite',
+                        album:'Dynamite',
+                        image:'https://picsum.photos/id/238/200',
+                    },
+                    {
+                        src:'Audio/LG.mp3',
+                        tittle:'Life Goes On',
+                        album:'BE',
+                        image:'https://picsum.photos/id/239/200',
+                    },
+                    {
+                        src:'Audio/again.mp3',
+                        tittle:'Again',
+                        album:'Your Lie in April',
+                        image:'https://picsum.photos/id/240/200',
+                    },
+                    {
+                        src:'Audio/ara_ara_sayonara.mp3',
+                        tittle:'Ara Ara Sayonara',
+                        album:'Demon Slayer',
+                        image:'https://picsum.photos/id/241/200',
+                    },
+                    {
+                        src:'Audio/demon_slayer.mp3',
+                        tittle:'Demon Slayer OP',
+                        album:'Demon Slayer',
+                        image:'https://picsum.photos/id/242/200',
+                    },
+                    {
+                        src:'Audio/kamado_tanjiro_no_uta.mp3',
+                        tittle:'Demon Slayer Ep',
+                        album:'Demon Slayer',
+                        image:'https://picsum.photos/id/243/200',
+                    },
+                    {
+                        src:'Audio/NTY.mp3',
+                        tittle:'Next to You',
+                        album:'Parasyte',
+                        image:'https://picsum.photos/id/244/200',
+                    },
+                    {
+                        src:'Audio/your_lie_in_april.mp3',
+                        tittle:'Your Lie In April OP',
+                        album:'Your lie in april',
+                        image:'https://picsum.photos/id/247/200',
+                    },
+                ],
+
+                playSong(){
+                    this.$refs.song.play();
+                    this.playing = true;
+                },
+                pauseSong(){
+                    this.$refs.song.pause();
+                    this.playing = false;
+                },
+                prevSong(){
+                    this.currentSong--;
+                    this.playing = false;
+                },
+                getSong(){
+                    return this.songs[this.currentSong].src;
+                },
+                nextSong(){
+                    this.currentSong++;
+                    this.playing=false;
+                }
+            };
+        }
+    </script>
+</body>
+</html>
